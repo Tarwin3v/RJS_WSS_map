@@ -1,37 +1,51 @@
-import React from "react";
+import React, { useContext } from "react";
 import { GraphQLClient } from "graphql-request";
 import { GoogleLogin } from "react-google-login";
 import { withStyles } from "@material-ui/core/styles";
-// import Typography from "@material-ui/core/Typography";
+import Typography from "@material-ui/core/Typography";
 
-const ME_QUERY = `
-{
-  me {
-    _id
-		name
-		email
-		picture
-  }
-}`;
+import Context from "../../context";
+import { ME_QUERY } from "../../graphql/queries";
 
 const Login = ({ classes }) => {
-  const responseGoogle = async response => {
-    const idToken = response.getAuthResponse().id_token;
+  const { dispatch } = useContext(Context);
+
+  const onSuccess = async googleUser => {
+    const idToken = googleUser.getAuthResponse().id_token;
     const client = new GraphQLClient("http://localhost:4000/graphql", {
       headers: { authorization: idToken }
     });
-    const data = await client.request(ME_QUERY);
-    console.log(response);
-    console.log({ data });
+    const { me } = await client.request(ME_QUERY);
+
+    dispatch({ type: "LOGIN_USER", payload: me });
+    dispatch({ type: "IS_LOGGED_IN", payload: googleUser.isSignedIn() });
+    console.log(me);
   };
+
+  const onFailure = err => {
+    console.error("Error loggin in", err);
+  };
+
   return (
-    <GoogleLogin
-      clientId="71953510333-2si25d2558vt6la38qhh7ljgt1lde2i2.apps.googleusercontent.com"
-      buttonText="Sign in with Google"
-      onSuccess={responseGoogle}
-      onFailure={responseGoogle}
-      isSignedIn={true}
-    />
+    <div className={classes.root}>
+      <Typography
+        component="h1"
+        variant="h3"
+        gutterBottom
+        noWrap
+        style={{ color: "rgb(66,133,244)" }}
+      >
+        Welcome
+      </Typography>
+      <GoogleLogin
+        clientId="71953510333-2si25d2558vt6la38qhh7ljgt1lde2i2.apps.googleusercontent.com"
+        buttonText="Sign in with Google"
+        onSuccess={onSuccess}
+        onFailure={onFailure}
+        isSignedIn={true}
+        theme="dark"
+      />
+    </div>
   );
 };
 
