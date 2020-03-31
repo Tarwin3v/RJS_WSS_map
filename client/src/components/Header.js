@@ -1,12 +1,48 @@
-import React from "react";
+import React, { useContext } from "react";
+import Context from "../context";
 import { withStyles } from "@material-ui/core/styles";
-// import AppBar from "@material-ui/core/AppBar";
-// import Toolbar from "@material-ui/core/Toolbar";
-// import Map from "@material-ui/icons/Map";
-// import Typography from "@material-ui/core/Typography";
+
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import MapIcon from "@material-ui/icons/Map";
+import Typography from "@material-ui/core/Typography";
+
+import Signout from "../components/Auth/Signout";
 
 const Header = ({ classes }) => {
-  return <div>Header</div>;
+  const { state } = useContext(Context);
+  const { currentUser } = state;
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          {/*Title /Logo */}
+          <div className={classes.grow}>
+            <MapIcon className={classes.icon} />
+            <Typography component="h1" variant="h6" color="inherit" noWrap>
+              GeoPins
+            </Typography>
+          </div>
+          {/* current User Info */}
+          {currentUser && (
+            <div className={classes.Rgrow}>
+              <img
+                className={classes.picture}
+                src={currentUser.picture}
+                alt={currentUser.name}
+              />
+              <Typography variant="h5" color="inherit" noWrap>
+                {currentUser.name.split(" ")[0]}
+              </Typography>
+            </div>
+          )}
+          {/* Signout Button */}
+          <Signout />
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
 };
 
 const styles = theme => ({
@@ -18,9 +54,13 @@ const styles = theme => ({
     display: "flex",
     alignItems: "center"
   },
+  Rgrow: {
+    display: "flex",
+    alignItems: "center"
+  },
   icon: {
     marginRight: theme.spacing.unit,
-    color: "green",
+    color: "white",
     fontSize: 45
   },
   mobile: {
@@ -28,7 +68,7 @@ const styles = theme => ({
   },
   picture: {
     height: "50px",
-    borderRadius: "90%",
+    borderRadius: "50%",
     marginRight: theme.spacing.unit * 2
   }
 });
