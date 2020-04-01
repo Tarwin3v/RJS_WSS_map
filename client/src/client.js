@@ -10,7 +10,7 @@ export const useClient = () => {
   const [idToken, setIdToken] = useState("");
 
   useEffect(() => {
-    const token = window.GamepadHapticActuator.auth2
+    const token = window.gapi.auth2
       .getAuthInstance()
       .currentUser.get()
       .getAuthResponse().id_token;
