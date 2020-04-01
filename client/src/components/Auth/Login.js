@@ -19,7 +19,6 @@ const Login = ({ classes }) => {
 
     dispatch({ type: "LOGIN_USER", payload: me });
     dispatch({ type: "IS_LOGGED_IN", payload: googleUser.isSignedIn() });
-    console.log(me);
   };
 
   const onFailure = err => {

@@ -23,7 +23,6 @@ new ApolloServer({
     try {
       authToken = req.headers.authorization;
       if (authToken) {
-        //TODO find or create user
         currentUser = await findOrCreateUser(authToken);
       }
     } catch (err) {
