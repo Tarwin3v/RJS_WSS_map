@@ -9,10 +9,8 @@ import { GET_PINS_QUERY } from "../graphql/queries";
 
 import PinIcon from "./PinIcon";
 import Blog from "./Blog";
-
-// import Button from "@material-ui/core/Button";
-// import Typography from "@material-ui/core/Typography";
-// import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
+import { Typography, Button } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
 
 const INITIAL_VIEWPORT = {
   latitude: 48.849479656086515,
@@ -76,6 +74,8 @@ const Map = ({ classes }) => {
     dispatch({ type: "SET_PIN", payload: pin });
   };
 
+  const isAuthUser = () => state.currentUser._id === popup.author._id;
+
   return (
     <div className={classes.root}>
       <ReactMapGL
@@ -131,6 +131,28 @@ const Map = ({ classes }) => {
             />
           </Marker>
         ))}
+        {/* Popup for created pins */}
+        {popup && (
+          <Popup
+            anchor="top"
+            latitude={popup.latitude}
+            longitude={popup.longitude}
+            closeOnClick={false}
+            onClose={() => setPopup(null)}
+          >
+            <img
+              className={classes.popupImage}
+              src={popup.image}
+              alt={popup.title}
+            />
+            <div className={classes.popupTab}>
+              <Typography>
+                {popup.latitude.toFixed(4)}, {popup.longitude.toFixed(4)}
+              </Typography>
+              {isAuthUser() && <DeleteIcon className={classes.deleteIcon} />}
+            </div>
+          </Popup>
+        )}
       </ReactMapGL>
       {/* Blog for pin content */}
       <Blog />
