@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { GraphQLClient } from "graphql-request";
-import { GoogleLogin } from "react-google-login";
+import GoogleLogin from "react-google-login";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 

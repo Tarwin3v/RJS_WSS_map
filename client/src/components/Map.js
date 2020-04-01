@@ -161,6 +161,7 @@ const Map = ({ classes }) => {
               </Typography>
               {isAuthUser() && (
                 <Button onClick={() => handleDeletePin(popup)}>
+                  Delete Pin
                   <DeleteIcon className={classes.deleteIcon} />
                 </Button>
               )}
