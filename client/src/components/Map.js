@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import differenceInMinutes from "date-fns/difference_in_minutes";
-import Context from "../context";
+import Context from "../context/context";
 import ReactMapGL, { NavigationControl, Marker, Popup } from "react-map-gl";
 
 import { Subscription } from "react-apollo";
-import { useClient } from "../client";
+import { useClient } from "../hooks/client";
 import { GET_PINS_QUERY } from "../graphql/queries";
 import { DELETE_PIN_MUTATION } from "../graphql/mutations";
 import {

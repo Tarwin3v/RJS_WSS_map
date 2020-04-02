@@ -1,5 +1,5 @@
 import React from "react";
-import withRoot from "../withRoot";
+import withRoot from "../HOC/withRoot";
 
 import Header from "../components/Header";
 import Map from "../components/Map";

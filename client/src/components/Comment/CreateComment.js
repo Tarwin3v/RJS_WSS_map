@@ -7,8 +7,8 @@ import SendIcon from "@material-ui/icons/Send";
 import Divider from "@material-ui/core/Divider";
 
 import { CREATE_COMMENT_MUTATION } from "../../graphql/mutations";
-import { useClient } from "../../client";
-import Context from "../../context";
+import { useClient } from "../../hooks/client";
+import Context from "../../context/context";
 
 const CreateComment = ({ classes }) => {
   const client = useClient();

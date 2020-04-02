@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import Context from "../../context";
+import Context from "../../context/context";
 import { GoogleLogout } from "react-google-login";
 import { withStyles } from "@material-ui/core/styles";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";

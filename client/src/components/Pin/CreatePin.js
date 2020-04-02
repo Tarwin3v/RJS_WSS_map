@@ -10,8 +10,8 @@ import ClearIcon from "@material-ui/icons/Clear";
 import SaveIcon from "@material-ui/icons/SaveTwoTone";
 import { unstable_useMediaQuery as useMediaQuery } from "@material-ui/core/useMediaQuery";
 
-import Context from "../../context";
-import { useClient } from "../../client";
+import Context from "../../context/context";
+import { useClient } from "../../hooks/client";
 import { CREATE_PIN_MUTATION } from "../../graphql/mutations";
 
 const CreatePin = ({ classes }) => {
@@ -34,9 +34,9 @@ const CreatePin = ({ classes }) => {
     const data = new FormData();
     data.append("file", image);
     data.append("upload_preset", "geopins");
-    data.append("cloud_name", "reedbargercodes");
+    data.append("cloud_name", "dkyb0ofgy");
     const res = await axios.post(
-      "https://api.cloudinary.com/v1_1/reedbargercodes/image/upload",
+      "https://api.cloudinary.com/v1_1/dkyb0ofgy/image/upload",
       data
     );
     return res.data.url;
