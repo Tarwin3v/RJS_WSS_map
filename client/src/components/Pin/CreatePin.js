@@ -1,10 +1,5 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
-import Context from "../../context";
-
-import { CREATE_PIN_MUTATION } from "../../graphql/mutations";
-import { useClient } from "../../client";
-
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -13,8 +8,14 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
 import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import SaveIcon from "@material-ui/icons/SaveTwoTone";
+import { unstable_useMediaQuery as useMediaQuery } from "@material-ui/core/useMediaQuery";
+
+import Context from "../../context";
+import { useClient } from "../../client";
+import { CREATE_PIN_MUTATION } from "../../graphql/mutations";
 
 const CreatePin = ({ classes }) => {
+  const mobileSize = useMediaQuery("(max-width: 650px)");
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const [title, setTitle] = useState("");
@@ -33,10 +34,9 @@ const CreatePin = ({ classes }) => {
     const data = new FormData();
     data.append("file", image);
     data.append("upload_preset", "geopins");
-    data.append("cloud_name", "dkyb0ofgy");
-
+    data.append("cloud_name", "reedbargercodes");
     const res = await axios.post(
-      "https://api.cloudinary.com/v1_1/dkyb0ofgy/upload",
+      "https://api.cloudinary.com/v1_1/reedbargercodes/image/upload",
       data
     );
     return res.data.url;
@@ -50,13 +50,13 @@ const CreatePin = ({ classes }) => {
       const { latitude, longitude } = state.draft;
       const variables = { title, image: url, content, latitude, longitude };
       await client.request(CREATE_PIN_MUTATION, variables);
-
       handleDeleteDraft();
     } catch (err) {
       setSubmitting(false);
       console.error("Error creating pin", err);
     }
   };
+
   return (
     <form className={classes.form}>
       <Typography
@@ -65,14 +65,13 @@ const CreatePin = ({ classes }) => {
         variant="h4"
         color="secondary"
       >
-        <LandscapeIcon className={classes.iconLarge} />
-        Pin Location
+        <LandscapeIcon className={classes.iconLarge} /> Pin Location
       </Typography>
       <div>
         <TextField
           name="title"
           label="Title"
-          palceholder="Insert pin title"
+          placeholder="Insert pin title"
           onChange={e => setTitle(e.target.value)}
         />
         <input
@@ -96,9 +95,9 @@ const CreatePin = ({ classes }) => {
       <div className={classes.contentField}>
         <TextField
           name="content"
-          label="content"
+          label="Content"
           multiline
-          rows="6"
+          rows={mobileSize ? "3" : "6"}
           margin="normal"
           fullWidth
           variant="outlined"
@@ -107,10 +106,10 @@ const CreatePin = ({ classes }) => {
       </div>
       <div>
         <Button
+          onClick={handleDeleteDraft}
           className={classes.button}
           variant="contained"
           color="primary"
-          onClick={handleDeleteDraft}
         >
           <ClearIcon className={classes.leftIcon} />
           Discard

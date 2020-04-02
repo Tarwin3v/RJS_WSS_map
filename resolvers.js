@@ -4,7 +4,7 @@ const Pin = require("./models/Pin");
 const pubsub = new PubSub();
 const PIN_ADDED = "PIN_ADDED";
 const PIN_DELETED = "PIN_DELETED";
-const PIN_UPDATED = "PIN_UPDTADED";
+const PIN_UPDATED = "PIN_UPDATED";
 
 const authenticated = next => (root, args, ctx, info) => {
   if (!ctx.currentUser) {
@@ -20,7 +20,6 @@ module.exports = {
       const pins = await Pin.find({})
         .populate("author")
         .populate("comments.author");
-
       return pins;
     }
   },
@@ -42,9 +41,7 @@ module.exports = {
     createComment: authenticated(async (root, args, ctx) => {
       const newComment = { text: args.text, author: ctx.currentUser._id };
       const pinUpdated = await Pin.findOneAndUpdate(
-        {
-          _id: args.pinId
-        },
+        { _id: args.pinId },
         { $push: { comments: newComment } },
         { new: true }
       )
@@ -62,7 +59,7 @@ module.exports = {
       subscribe: () => pubsub.asyncIterator(PIN_DELETED)
     },
     pinUpdated: {
-      suscribe: () => pubsub.asyncIterator(PIN_UPDATED)
+      subscribe: () => pubsub.asyncIterator(PIN_UPDATED)
     }
   }
 };

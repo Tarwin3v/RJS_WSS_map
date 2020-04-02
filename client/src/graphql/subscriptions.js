@@ -36,8 +36,8 @@ export const PIN_UPDATED_SUBSCRIPTION = gql`
       title
       content
       image
-      longitude
       latitude
+      longitude
       author {
         _id
         name
