@@ -13,6 +13,7 @@ import {
   PIN_DELETED_SUBSCRIPTION
 } from "../graphql/subscriptions";
 
+import { unstable_useMediaQuery as useMediayQuery } from "@material-ui/core/useMediaQuery";
 import { withStyles } from "@material-ui/core/styles";
 import PinIcon from "./PinIcon";
 import Blog from "./Blog";
@@ -26,6 +27,7 @@ const INITIAL_VIEWPORT = {
 };
 
 const Map = ({ classes }) => {
+  const mobileSize = useMediayQuery("(max-width:650px)");
   const client = useClient();
   const { state, dispatch } = useContext(Context);
 
@@ -41,6 +43,14 @@ const Map = ({ classes }) => {
   }, []);
 
   const [popup, setPopup] = useState(null);
+
+  useEffect(() => {
+    const pinExists =
+      popup && state.pins.findIndex(pin => pin._id === popup._id) > -1;
+    if (!pinExists) {
+      setPopup(null);
+    }
+  }, [state.pins.length]);
 
   const getUserPosition = () => {
     if ("geolocation" in navigator) {
@@ -91,7 +101,7 @@ const Map = ({ classes }) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={mobileSize ? classes.rootMobile : classes.root}>
       <ReactMapGL
         width="100vw"
         height="calc(100vh - 64px)"
@@ -100,6 +110,7 @@ const Map = ({ classes }) => {
         onViewportChange={newViewport => setViewport(newViewport)}
         {...viewport}
         onClick={handleMapClick}
+        scrollZoom={!mobileSize}
       >
         {/* Navigation Control */}
         <div className={classes.navigationControl}>
