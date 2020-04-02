@@ -29,7 +29,7 @@ const Header = ({ classes }) => {
               color="inherit"
               noWrap
             >
-              GeoPins
+              PinPin
             </Typography>
           </div>
           {/* current User Info */}
