@@ -4,9 +4,9 @@ import GoogleLogin from "react-google-login";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 
-import Context from "../../context";
+import Context from "../../context/context";
 import { ME_QUERY } from "../../graphql/queries";
-import { BASE_URL } from "../../client";
+import { BASE_URL } from "../../hooks/client";
 
 const Login = ({ classes }) => {
   const { dispatch } = useContext(Context);

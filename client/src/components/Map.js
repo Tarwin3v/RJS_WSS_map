@@ -1,13 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import differenceInMinutes from "date-fns/difference_in_minutes";
-import Context from "../context";
+import Context from "../context/context";
 import ReactMapGL, { NavigationControl, Marker, Popup } from "react-map-gl";
-import { withStyles } from "@material-ui/core/styles";
 
-import { useClient } from "../client";
+import { Subscription } from "react-apollo";
+import { useClient } from "../hooks/client";
 import { GET_PINS_QUERY } from "../graphql/queries";
 import { DELETE_PIN_MUTATION } from "../graphql/mutations";
+import {
+  PIN_ADDED_SUBSCRIPTION,
+  PIN_UPDATED_SUBSCRIPTION,
+  PIN_DELETED_SUBSCRIPTION
+} from "../graphql/subscriptions";
 
+import { unstable_useMediaQuery as useMediayQuery } from "@material-ui/core/useMediaQuery";
+import { withStyles } from "@material-ui/core/styles";
 import PinIcon from "./PinIcon";
 import Blog from "./Blog";
 import { Typography, Button } from "@material-ui/core";
@@ -20,6 +27,7 @@ const INITIAL_VIEWPORT = {
 };
 
 const Map = ({ classes }) => {
+  const mobileSize = useMediayQuery("(max-width:650px)");
   const client = useClient();
   const { state, dispatch } = useContext(Context);
 
@@ -35,6 +43,14 @@ const Map = ({ classes }) => {
   }, []);
 
   const [popup, setPopup] = useState(null);
+
+  useEffect(() => {
+    const pinExists =
+      popup && state.pins.findIndex(pin => pin._id === popup._id) > -1;
+    if (!pinExists) {
+      setPopup(null);
+    }
+  }, [state.pins.length]);
 
   const getUserPosition = () => {
     if ("geolocation" in navigator) {
@@ -78,16 +94,14 @@ const Map = ({ classes }) => {
   const isAuthUser = () => state.currentUser._id === popup.author._id;
 
   const handleDeletePin = async pin => {
-    const { deletePin } = await client.request(DELETE_PIN_MUTATION, {
+    await client.request(DELETE_PIN_MUTATION, {
       pinId: pin._id
     });
-
-    dispatch({ type: "DELETE_PIN", payload: deletePin });
     setPopup(null);
   };
 
   return (
-    <div className={classes.root}>
+    <div className={mobileSize ? classes.rootMobile : classes.root}>
       <ReactMapGL
         width="100vw"
         height="calc(100vh - 64px)"
@@ -96,6 +110,7 @@ const Map = ({ classes }) => {
         onViewportChange={newViewport => setViewport(newViewport)}
         {...viewport}
         onClick={handleMapClick}
+        scrollZoom={!mobileSize}
       >
         {/* Navigation Control */}
         <div className={classes.navigationControl}>
@@ -169,6 +184,31 @@ const Map = ({ classes }) => {
           </Popup>
         )}
       </ReactMapGL>
+      {/* Subscriptions for creating/updating/deleting pins */}
+      <Subscription
+        subscription={PIN_ADDED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinAdded } = subscriptionData.data;
+          console.log(pinAdded);
+          dispatch({ type: "CREATE_PIN", payload: pinAdded });
+        }}
+      />
+      <Subscription
+        subscription={PIN_UPDATED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinUpdated } = subscriptionData.data;
+          console.log(pinUpdated);
+          dispatch({ type: "CREATE_COMMENT", payload: pinUpdated });
+        }}
+      />
+      <Subscription
+        subscription={PIN_DELETED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinDeleted } = subscriptionData.data;
+          console.log(pinDeleted);
+          dispatch({ type: "DELETE_PIN", payload: pinDeleted });
+        }}
+      />
       {/* Blog for pin content */}
       <Blog />
     </div>
