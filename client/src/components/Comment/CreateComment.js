@@ -12,16 +12,15 @@ import { useClient } from "../../client";
 
 const CreateComment = ({ classes }) => {
   const client = useClient();
-  const { state, dispatch } = useContext(Context);
+  const { state } = useContext(Context);
   const [comment, setComment] = useState("");
 
   const handleSubmitComment = async () => {
-    const { createComment } = await client.request(CREATE_COMMENT_MUTATION, {
+    await client.request(CREATE_COMMENT_MUTATION, {
       pinId: state.currentPin._id,
       text: comment
     });
-    console.log(createComment);
-    dispatch({ type: "CREATE_COMMENT", payload: createComment });
+
     setComment("");
   };
   return (
