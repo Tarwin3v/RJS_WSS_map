@@ -6,7 +6,9 @@ const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
 const { findOrCreateUser } = require("./controllers/userCtrl");
 
-//@d CONNECTION TO DB
+// =============================================================================
+//                         //@d CONNECTION TO DB
+// =============================================================================
 
 mongoose
   .connect(process.env.MONGO_URI, {
@@ -17,7 +19,9 @@ mongoose
   .then(() => console.log("DB connected"))
   .catch((e) => console.error(e));
 
-//@a CREATE AN  APOLLO SERVER
+// =============================================================================
+//                         //@d CREATE AN  APOLLO SERVER
+// =============================================================================
 
 new ApolloServer({
   typeDefs,

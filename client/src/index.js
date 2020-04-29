@@ -19,13 +19,13 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 const wsLink = new WebSocketLink({
   uri: "wss://pinit-butter.herokuapp.com/graphql",
   options: {
-    reconnect: true
-  }
+    reconnect: true,
+  },
 });
 
 const client = new ApolloClient({
   link: wsLink,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 });
 
 const Root = () => {
@@ -48,7 +48,4 @@ const Root = () => {
 
 ReactDOM.render(<Root />, document.getElementById("root"));
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.register();
