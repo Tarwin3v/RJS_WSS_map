@@ -6,14 +6,18 @@ const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
 const { findOrCreateUser } = require("./controllers/userCtrl");
 
+//@d CONNECTION TO DB
+
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
   })
   .then(() => console.log("DB connected"))
-  .catch(e => console.error(e));
+  .catch((e) => console.error(e));
+
+//@a CREATE AN  APOLLO SERVER
 
 new ApolloServer({
   typeDefs,
@@ -30,7 +34,7 @@ new ApolloServer({
       console.error(`Unable to authenticate user with token ${authToken}`);
     }
     return { currentUser };
-  }
+  },
 })
   .listen({ port: process.env.PORT || 4000 })
   .then(({ url }) => {

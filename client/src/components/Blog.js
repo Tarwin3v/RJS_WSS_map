@@ -1,10 +1,12 @@
 import React, { useContext } from "react";
 import Context from "../context/context";
 
+//MUI
 import { unstable_useMediaQuery as useMediayQuery } from "@material-ui/core/useMediaQuery";
 import { withStyles } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
 
+//COMP
 import NoContent from "./Pin/NoContent";
 import CreatePin from "./Pin/CreatePin";
 import PinContent from "./Pin/PinContent";
@@ -36,14 +38,14 @@ const styles = {
     maxHeight: "calc(100vh - 64px)",
     overflowY: "scroll",
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   rootMobile: {
     maxWidth: "100%",
     maxHeight: 300,
     overflowX: "hidden",
-    overflowY: "scroll"
-  }
+    overflowY: "scroll",
+  },
 };
 
 export default withStyles(styles)(Blog);

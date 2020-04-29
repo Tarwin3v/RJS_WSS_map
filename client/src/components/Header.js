@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import Context from "../context/context";
 
+//MUI
 import { unstable_useMediaQuery as useMediayQuery } from "@material-ui/core/useMediaQuery";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -8,6 +9,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import MapIcon from "@material-ui/icons/Map";
 import Typography from "@material-ui/core/Typography";
 
+//COMP
 import Signout from "../components/Auth/Signout";
 
 const Header = ({ classes }) => {
@@ -58,32 +60,32 @@ const Header = ({ classes }) => {
   );
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   grow: {
     flexGrow: 1,
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
   },
   Rgrow: {
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
   },
   icon: {
     marginRight: theme.spacing.unit,
     color: "white",
-    fontSize: 45
+    fontSize: 45,
   },
   mobile: {
-    display: "none"
+    display: "none",
   },
   picture: {
     height: "50px",
     borderRadius: "50%",
-    marginRight: theme.spacing.unit * 2
-  }
+    marginRight: theme.spacing.unit * 2,
+  },
 });
 
 export default withStyles(styles)(Header);

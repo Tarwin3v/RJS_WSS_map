@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import Context from "../../context/context";
-
-import { withStyles } from "@material-ui/core/styles";
 import { GoogleLogout } from "react-google-login";
+
+//MUI
+import { withStyles } from "@material-ui/core/styles";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Typography from "@material-ui/core/Typography";
 
@@ -20,10 +21,7 @@ const Signout = ({ classes }) => {
       onLogoutSuccess={onSignout}
       render={({ onClick }) => (
         <span className={classes.root} onClick={onClick}>
-          <Typography
-            variant="body1"
-            className={classes.buttonText}
-          ></Typography>
+          <Typography variant="body1" className={classes.buttonText} />
           <ExitToAppIcon className={classes.buttonIcon} />
         </span>
       )}
@@ -34,15 +32,15 @@ const Signout = ({ classes }) => {
 const styles = {
   root: {
     cursor: "pointer",
-    display: "flex"
+    display: "flex",
   },
   buttonText: {
-    color: "orange"
+    color: "orange",
   },
   buttonIcon: {
     marginLeft: "5px",
-    color: "white"
-  }
+    color: "white",
+  },
 };
 
 export default withStyles(styles)(Signout);

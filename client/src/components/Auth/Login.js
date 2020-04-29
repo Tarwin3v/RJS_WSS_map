@@ -1,20 +1,23 @@
 import React, { useContext } from "react";
-import { GraphQLClient } from "graphql-request";
 import GoogleLogin from "react-google-login";
+
+//MUI
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 
+//DATA
 import Context from "../../context/context";
-import { ME_QUERY } from "../../graphql/queries";
 import { BASE_URL } from "../../hooks/client";
+import { GraphQLClient } from "graphql-request";
+import { ME_QUERY } from "../../graphql/queries";
 
 const Login = ({ classes }) => {
   const { dispatch } = useContext(Context);
 
-  const onSuccess = async googleUser => {
+  const onSuccess = async (googleUser) => {
     const idToken = googleUser.getAuthResponse().id_token;
     const client = new GraphQLClient(BASE_URL, {
-      headers: { authorization: idToken }
+      headers: { authorization: idToken },
     });
     const { me } = await client.request(ME_QUERY);
 
@@ -22,7 +25,7 @@ const Login = ({ classes }) => {
     dispatch({ type: "IS_LOGGED_IN", payload: googleUser.isSignedIn() });
   };
 
-  const onFailure = err => {
+  const onFailure = (err) => {
     console.error("Error loggin in", err);
     dispatch({ type: "IS_LOGGED_IN", payload: false });
   };
@@ -56,8 +59,8 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     flexDirection: "column",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 };
 
 export default withStyles(styles)(Login);

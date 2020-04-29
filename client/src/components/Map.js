@@ -1,8 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import differenceInMinutes from "date-fns/difference_in_minutes";
-import Context from "../context/context";
 import ReactMapGL, { NavigationControl, Marker, Popup } from "react-map-gl";
 
+//MUI
+import { unstable_useMediaQuery as useMediayQuery } from "@material-ui/core/useMediaQuery";
+import { withStyles } from "@material-ui/core/styles";
+import { Typography, Button } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
+
+//COMP
+import PinIcon from "./PinIcon";
+import Blog from "./Blog";
+
+//DATA
+import Context from "../context/context";
 import { Subscription } from "react-apollo";
 import { useClient } from "../hooks/client";
 import { GET_PINS_QUERY } from "../graphql/queries";
@@ -10,20 +21,13 @@ import { DELETE_PIN_MUTATION } from "../graphql/mutations";
 import {
   PIN_ADDED_SUBSCRIPTION,
   PIN_UPDATED_SUBSCRIPTION,
-  PIN_DELETED_SUBSCRIPTION
+  PIN_DELETED_SUBSCRIPTION,
 } from "../graphql/subscriptions";
-
-import { unstable_useMediaQuery as useMediayQuery } from "@material-ui/core/useMediaQuery";
-import { withStyles } from "@material-ui/core/styles";
-import PinIcon from "./PinIcon";
-import Blog from "./Blog";
-import { Typography, Button } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
 
 const INITIAL_VIEWPORT = {
   latitude: 48.849479656086515,
   longitude: 2.3323768214423035,
-  zoom: 13
+  zoom: 13,
 };
 
 const Map = ({ classes }) => {
@@ -44,17 +48,20 @@ const Map = ({ classes }) => {
 
   const [popup, setPopup] = useState(null);
 
-  useEffect(() => {
-    const pinExists =
-      popup && state.pins.findIndex(pin => pin._id === popup._id) > -1;
-    if (!pinExists) {
-      setPopup(null);
-    }
-  }, [state.pins.length]);
+  useEffect(
+    () => {
+      const pinExists =
+        popup && state.pins.findIndex((pin) => pin._id === popup._id) > -1;
+      if (!pinExists) {
+        setPopup(null);
+      }
+    },
+    [state.pins.length]
+  );
 
   const getUserPosition = () => {
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(position => {
+      navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
         setViewport({ ...viewport, latitude, longitude });
         setUserPosition({ latitude, longitude });
@@ -67,7 +74,7 @@ const Map = ({ classes }) => {
     dispatch({ type: "GET_PINS", payload: getPins });
   };
 
-  const handleMapClick = event => {
+  const handleMapClick = (event) => {
     const { lngLat, leftButton } = event;
     if (!leftButton) return;
     if (!state.draft) {
@@ -76,26 +83,26 @@ const Map = ({ classes }) => {
     const [longitude, latitude] = lngLat;
     dispatch({
       type: "UPDATE_DRAFT_LOCATION",
-      payload: { latitude, longitude }
+      payload: { latitude, longitude },
     });
   };
 
-  const highlightNewPin = pin => {
+  const highlightNewPin = (pin) => {
     const isNewPin =
       differenceInMinutes(Date.now(), Number(pin.createdAt)) <= 30;
     return isNewPin ? "limegreen" : "darkblue";
   };
 
-  const handleSelectPin = pin => {
+  const handleSelectPin = (pin) => {
     setPopup(pin);
     dispatch({ type: "SET_PIN", payload: pin });
   };
 
   const isAuthUser = () => state.currentUser._id === popup.author._id;
 
-  const handleDeletePin = async pin => {
+  const handleDeletePin = async (pin) => {
     await client.request(DELETE_PIN_MUTATION, {
-      pinId: pin._id
+      pinId: pin._id,
     });
     setPopup(null);
   };
@@ -107,7 +114,7 @@ const Map = ({ classes }) => {
         height="calc(100vh - 64px)"
         mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxApiAccessToken="pk.eyJ1IjoidGFyd2luM3YiLCJhIjoiY2s1emZzZHVvMGtqMDNqcDN3cHB0dmd5eSJ9.4orl8QiDwgisDQsJuPwSpw"
-        onViewportChange={newViewport => setViewport(newViewport)}
+        onViewportChange={(newViewport) => setViewport(newViewport)}
         {...viewport}
         onClick={handleMapClick}
         scrollZoom={!mobileSize}
@@ -115,7 +122,7 @@ const Map = ({ classes }) => {
         {/* Navigation Control */}
         <div className={classes.navigationControl}>
           <NavigationControl
-            onViewportChange={newViewport => setViewport(newViewport)}
+            onViewportChange={(newViewport) => setViewport(newViewport)}
           />
         </div>
         {/* Pin for User's position */}
@@ -141,7 +148,7 @@ const Map = ({ classes }) => {
           </Marker>
         )}
         {/* Persisted Pins */}
-        {state.pins.map(pin => (
+        {state.pins.map((pin) => (
           <Marker
             key={pin._id}
             latitude={pin.latitude}
@@ -217,33 +224,33 @@ const Map = ({ classes }) => {
 
 const styles = {
   root: {
-    display: "flex"
+    display: "flex",
   },
   rootMobile: {
     display: "flex",
-    flexDirection: "column-reverse"
+    flexDirection: "column-reverse",
   },
   navigationControl: {
     position: "absolute",
     top: 0,
     right: 0,
-    margin: "1em"
+    margin: "1em",
   },
   deleteIcon: {
-    color: "red"
+    color: "red",
   },
   popupImage: {
     padding: "0.4em",
     height: 200,
     width: 200,
-    objectFit: "cover"
+    objectFit: "cover",
   },
   popupTab: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "column"
-  }
+    flexDirection: "column",
+  },
 };
 
 export default withStyles(styles)(Map);

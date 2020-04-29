@@ -1,4 +1,6 @@
 import React, { useState, useContext } from "react";
+
+//MUI
 import { withStyles } from "@material-ui/core";
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
@@ -6,6 +8,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import SendIcon from "@material-ui/icons/Send";
 import Divider from "@material-ui/core/Divider";
 
+//DATA
 import { CREATE_COMMENT_MUTATION } from "../../graphql/mutations";
 import { useClient } from "../../hooks/client";
 import Context from "../../context/context";
@@ -36,7 +39,7 @@ const CreateComment = ({ classes }) => {
           placeholder="Add Comment"
           multiline={true}
           value={comment}
-          onChange={e => setComment(e.target.value)}
+          onChange={(e) => setComment(e.target.value)}
         />
         <IconButton
           onClick={handleSubmitComment}
@@ -51,23 +54,23 @@ const CreateComment = ({ classes }) => {
   );
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   form: {
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
   },
   input: {
     marginLeft: 8,
-    flex: 1
+    flex: 1,
   },
   clearButton: {
     padding: 0,
-    color: "red"
+    color: "red",
   },
   sendButton: {
     padding: 0,
-    color: theme.palette.secondary.dark
-  }
+    color: theme.palette.secondary.dark,
+  },
 });
 
 export default withStyles(styles)(CreateComment);

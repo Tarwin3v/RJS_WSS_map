@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 
+//MUI
 import { unstable_useMediaQuery as useMediaQuery } from "@material-ui/core/useMediaQuery";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -43,7 +44,7 @@ const CreatePin = ({ classes }) => {
     return res.data.url;
   };
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     try {
       event.preventDefault();
       setSubmitting(true);
@@ -73,14 +74,14 @@ const CreatePin = ({ classes }) => {
           name="title"
           label="Title"
           placeholder="Insert pin title"
-          onChange={e => setTitle(e.target.value)}
+          onChange={(e) => setTitle(e.target.value)}
         />
         <input
           accept="image/*"
           id="image"
           type="file"
           className={classes.input}
-          onChange={e => setImage(e.target.files[0])}
+          onChange={(e) => setImage(e.target.files[0])}
         />
         <label htmlFor="image">
           <Button
@@ -102,7 +103,7 @@ const CreatePin = ({ classes }) => {
           margin="normal"
           fullWidth
           variant="outlined"
-          onChange={e => setContent(e.target.value)}
+          onChange={(e) => setContent(e.target.value)}
         />
       </div>
       <div>
@@ -131,44 +132,44 @@ const CreatePin = ({ classes }) => {
   );
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   form: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    paddingBottom: theme.spacing.unit
+    paddingBottom: theme.spacing.unit,
   },
   contentField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: "95%"
+    width: "95%",
   },
   input: {
-    display: "none"
+    display: "none",
   },
   alignCenter: {
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
   },
   iconLarge: {
     fontSize: 40,
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing.unit,
   },
   leftIcon: {
     fontSize: 20,
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing.unit,
   },
   rightIcon: {
     fontSize: 20,
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing.unit,
   },
   button: {
     marginTop: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 2,
     marginRight: theme.spacing.unit,
-    marginLeft: 0
-  }
+    marginLeft: 0,
+  },
 });
 
 export default withStyles(styles)(CreatePin);
