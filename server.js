@@ -26,6 +26,7 @@ mongoose
 new ApolloServer({
   typeDefs,
   resolvers,
+  //@q we create our context to get our currentUser data && create // we send this token from our client with our client hooks && graphqlClient
   context: async ({ req }) => {
     let authToken = null;
     let currentUser = null;
