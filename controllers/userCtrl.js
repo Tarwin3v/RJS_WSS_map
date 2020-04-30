@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const { OAuth2Client } = require("google-auth-library");
 
+//@q https://developers.google.com/identity/sign-in/web/backend-auth
 const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID);
 
 const verifyAuthToken = async (token) => {

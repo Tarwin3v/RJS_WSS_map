@@ -3,18 +3,21 @@ const Pin = require("./models/Pin");
 
 //@q Subscriptions depend on use of a publish and subscribe primitive to generate the events that notify a subscription.
 //@q PubSub is a factory that creates event generators
+//@q https://www.apollographql.com/docs/apollo-server/data/subscriptions/
 
 const pubsub = new PubSub();
 const PIN_ADDED = "PIN_ADDED";
 const PIN_DELETED = "PIN_DELETED";
 const PIN_UPDATED = "PIN_UPDATED";
 
-//@q https://www.apollographql.com/docs/apollo-server/data/resolvers/#resolver-arguments
-
 //@q A resolver can optionally accept four positional arguments: (parent, args, context, info).
+
 //@q parent :: https://www.apollographql.com/docs/apollo-server/data/resolvers/#resolver-chains
+
 //@q args :: An object that contains all GraphQL arguments provided for this field.
 //@q For example, when executing query{ user(id: "4") }, the args object passed to the user resolver is { "id": "4" }
+
+//@q context ::  The context argument is useful for passing things that any resolver might need, like authentication scope, database connections, and custom fetch functions
 
 //@q authenticated middleware // https://medium.com/the-guild/authentication-and-authorization-in-graphql-and-how-graphql-modules-can-help-fadc1ee5b0c2
 const authenticated = (next) => (root, args, ctx, info) => {
@@ -49,10 +52,13 @@ module.exports = {
         ...args.input,
         author: ctx.currentUser._id,
       }).save();
+
       //@d we populate our pin with author data
       const pinAdded = await Pin.populate(newPin, "author");
+
       //@q then we publish our new pin to access to it in realtime in our app
       pubsub.publish(PIN_ADDED, { pinAdded });
+
       return pinAdded;
     }),
     deletePin: authenticated(async (root, args, ctx) => {
@@ -73,6 +79,7 @@ module.exports = {
       return pinUpdated;
     }),
   },
+  //@d we add a Subscription resolver that returns an AsyncIterator, which listens to the events asynchronously
   Subscription: {
     pinAdded: {
       subscribe: () => pubsub.asyncIterator(PIN_ADDED),
