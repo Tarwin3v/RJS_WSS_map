@@ -31,12 +31,20 @@ const client = new ApolloClient({
 });
 
 const Root = () => {
+  //@q we create a variable initial state with our initial context
   const initialState = useContext(Context);
+  //@q we get state && dispatch from our reducer hook
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <Router>
+      {{
+        /* wraps our React app and places the client on the context, which allows you to access it from anywhere in your component tree. */
+      }}
       <ApolloProvider client={client}>
+        {{
+          /* wrap our React app with our Context provider that will give us access to state and dispatch in our component tree */
+        }}
         <Context.Provider value={{ state, dispatch }}>
           <Switch>
             <ProtectedRoute exact path="/" component={App} />
