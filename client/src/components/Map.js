@@ -112,7 +112,7 @@ const Map = ({ classes }) => {
       <ReactMapGL
         width="100vw"
         height="calc(100vh - 64px)"
-        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapStyle="mapbox://styles/tarwin3v/ck9mpg5i708yl1imoccomr3kn/draft"
         mapboxApiAccessToken="pk.eyJ1IjoidGFyd2luM3YiLCJhIjoiY2s1emZzZHVvMGtqMDNqcDN3cHB0dmd5eSJ9.4orl8QiDwgisDQsJuPwSpw"
         onViewportChange={(newViewport) => setViewport(newViewport)}
         {...viewport}
