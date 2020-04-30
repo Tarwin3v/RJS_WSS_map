@@ -6,6 +6,7 @@ export const BASE_URL =
     ? "https://pinit-butter.herokuapp.com/graphql"
     : "http://localhost:4000/graphql";
 
+//@q we get our token from google api and we persist it in idToken state before to send with with our GraphQLClient to our graphql backend in a header
 export const useClient = () => {
   const [idToken, setIdToken] = useState("");
 
@@ -18,6 +19,6 @@ export const useClient = () => {
   }, []);
 
   return new GraphQLClient(BASE_URL, {
-    headers: { authorization: idToken }
+    headers: { authorization: idToken },
   });
 };

@@ -16,6 +16,7 @@ import { ApolloClient } from "apollo-client";
 import { WebSocketLink } from "apollo-link-ws";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
+//@q allow us to send GraphQL queries && mutations over ws
 const wsLink = new WebSocketLink({
   uri: "wss://pinit-butter.herokuapp.com/graphql",
   options: {
@@ -25,6 +26,7 @@ const wsLink = new WebSocketLink({
 
 const client = new ApolloClient({
   link: wsLink,
+  //@q normalized data store
   cache: new InMemoryCache(),
 });
 
